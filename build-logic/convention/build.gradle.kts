@@ -40,5 +40,51 @@ tasks {
 }
 
 gradlePlugin {
-    plugins {}
+    plugins {
+        register("androidApplicationCompose") {
+            id = "grapla.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+        register("androidApplication") {
+            id = "grapla.android.application"
+            implementationClass = "AndroidApplicationConventionPlugin"
+        }
+        register("androidLibraryCompose") {
+            id = "grapla.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
+        register("androidLibrary") {
+            id = "grapla.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
+        register("androidFeature") {
+            id = "grapla.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
+        }
+        register("androidTest") {
+            id = "grapla.android.test"
+            implementationClass = "AndroidTestConventionPlugin"
+        }
+        register("hilt") {
+            id = "grapla.hilt"
+            implementationClass = "HiltConventionPlugin"
+        }
+        register("androidRoom") {
+            id = "grapla.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
+        register("androidFirebase") {
+            id = "grapla.android.application.firebase"
+            implementationClass = "AndroidApplicationFirebaseConventionPlugin"
+        }
+        register("androidLint") {
+            id = "grapla.android.lint"
+            implementationClass = "AndroidLintConventionPlugin"
+        }
+        register("jvmLibrary") {
+            id = "grapla.jvm.library"
+            implementationClass = "JvmLibraryConventionPlugin"
+        }
+        
+    }
 }
