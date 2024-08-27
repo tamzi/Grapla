@@ -26,7 +26,7 @@ import org.gradle.kotlin.dsl.dependencies
  *  }`
  *
  * Within the with(target) block, the pluginManager is used to apply two custom plugins:
- * nowinandroid.android.library and nowinandroid.hilt.
+ * grapla.android.library and grapla.hilt.
  * These plugins are essential for setting up the Android library and Hilt dependency injection framework
  *
  *  `pluginManager.apply {
@@ -51,7 +51,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
             dependencies {
                 add("implementation", project(":core:ui"))
-                add("implementation", project(":core:designsystem"))
+                add("implementation", project(":gruid"))
 
                 add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
                 add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())

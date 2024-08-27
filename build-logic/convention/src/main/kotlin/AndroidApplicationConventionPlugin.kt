@@ -31,13 +31,13 @@ import org.gradle.kotlin.dsl.configure
  *  These plugins include `com.android.application` for Android application support,
  *  `org.jetbrains.kotlin.android` for Kotlin support, and
  *  `com.dropbox.dependency-guard` for dependency management.
- *  There is also a placeholder for adding a missing plugin for linting.
+ *  `grapla.android.lint` for adding a missing plugin for linting.
  *
  *   `with(pluginManager) {
  *     apply("com.android.application")
  *     apply("org.jetbrains.kotlin.android")
  *     apply("com.dropbox.dependency-guard")
- *     apply("TODO(\"Add the missing plugin for lint\")")
+ *     apply("grapla.android.lint")
  *   }`
  *
  *  Next, the `extensions.configure<ApplicationExtension>` method is used to
@@ -74,7 +74,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
                 apply("com.dropbox.dependency-guard")
-                apply("TODO(\"Add the missing plugin for lint\")")
+                apply("grapla.android.lint")
             }
 
             extensions.configure<ApplicationExtension> {
