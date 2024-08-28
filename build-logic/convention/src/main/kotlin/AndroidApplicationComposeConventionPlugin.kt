@@ -26,12 +26,12 @@ import org.gradle.kotlin.dsl.getByType
  *          }
  *         }
  *      }`
- *      
- *   Within the `with(target)` block, the `apply` method is called twice to apply 
+ *
+ *   Within the `with(target)` block, the `apply` method is called twice to apply
  *   the `com.android.application` and `org.jetbrains.kotlin.plugin.compose` plugins to the project. 
  *   These plugins are essential for building Android applications and enabling 
  *   Jetpack Compose support, respectively.
- *   
+ *
  *   `apply(plugin = "com.android.application")
  *    apply(plugin = "org.jetbrains.kotlin.plugin.compose")`
  *      
@@ -55,6 +55,7 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "com.android.application")
             apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+            apply(plugin = "org.jetbrains.kotlin.android")
 
             val extension = extensions.getByType<ApplicationExtension>()
             configureAndroidCompose(extension)

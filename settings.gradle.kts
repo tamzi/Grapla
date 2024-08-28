@@ -22,4 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Grapla"
 include(":app")
- 
+include(":gruid")
+include(":gruiddemo")

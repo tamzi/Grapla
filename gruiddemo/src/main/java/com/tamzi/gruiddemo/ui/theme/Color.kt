@@ -1,4 +1,4 @@
-package com.tamzi.grapla.ui.theme
+package com.tamzi.gruiddemo.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
