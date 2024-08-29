@@ -1,4 +1,4 @@
-package com.tamzi.grapla.ui.theme
+package com.tamzi.gruid.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -9,6 +9,12 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.tamzi.gruid.atoms.color.Pink40
+import com.tamzi.gruid.atoms.color.Pink80
+import com.tamzi.gruid.atoms.color.Purple40
+import com.tamzi.gruid.atoms.color.Purple80
+import com.tamzi.gruid.atoms.color.PurpleGrey40
+import com.tamzi.gruid.atoms.color.PurpleGrey80
 
 private val DarkColorScheme =
     darkColorScheme(

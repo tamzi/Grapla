@@ -1,4 +1,4 @@
-package com.tamzi.grapla.ui.theme
+package com.tamzi.gruid.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
