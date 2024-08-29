@@ -60,5 +60,5 @@ internal fun LibraryAndroidComponentsExtension.disableUnnecessaryAndroidTests(
     project: Project,
 ) = beforeVariants {
     it.enableAndroidTest = it.enableAndroidTest
-            && project.projectDir.resolve("src/androidTest").exists()
+        && project.projectDir.resolve("src/androidTest").exists()
 }

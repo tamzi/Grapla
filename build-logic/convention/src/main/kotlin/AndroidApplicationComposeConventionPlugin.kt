@@ -39,14 +39,14 @@ import org.gradle.kotlin.dsl.getByType
  *  This extension provides access to Android-specific configuration options.
  *
  *  `val extension = extensions.getByType<ApplicationExtension>()`
- *  
+ *
  *  Finally, the `configureAndroidCompose(extension)` function is called with the retrieved
  *  `ApplicationExtension` instance. This function is responsible for configuring the Android
- *  application to support Jetpack Compose, although its implementation is not 
+ *  application to support Jetpack Compose, although its implementation is not
  *  shown in the provided code.
- *  
+ *
  *  `configureAndroidCompose(extension)`
- * 
+ *
  * */
 
 class AndroidApplicationComposeConventionPlugin : Plugin<Project> {

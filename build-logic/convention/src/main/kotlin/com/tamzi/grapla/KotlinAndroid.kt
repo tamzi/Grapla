@@ -153,7 +153,7 @@ internal fun Project.configureKotlinJvm() {
  *  Next, it uses a when expression to handle different types of Kotlin project extensions.
  *  If the extension is of type KotlinAndroidProjectExtension or KotlinJvmProjectExtension,
  *  it accesses the compilerOptions property.
- *  If the extension type is unsupported, it throws a TODO exception:
+ *  If the extension type is unsupported, it throws a TO-DO exception:
  *
  *      `when (this) {
  *     is KotlinAndroidProjectExtension -> compilerOptions

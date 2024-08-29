@@ -29,6 +29,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":gruid"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
 }

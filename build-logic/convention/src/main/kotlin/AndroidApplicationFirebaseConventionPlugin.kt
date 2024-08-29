@@ -70,7 +70,6 @@ import org.gradle.kotlin.dsl.dependencies
  *
  * */
 
-
 class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
