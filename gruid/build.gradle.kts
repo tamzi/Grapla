@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.grapla.android.library)
     alias(libs.plugins.grapla.android.library.compose)
     alias(libs.plugins.grapla.android.lint)
+    alias(libs.plugins.ktlint)
 }
 
 android {
@@ -54,6 +55,3 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
-
-
-

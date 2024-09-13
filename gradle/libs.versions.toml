@@ -2,7 +2,7 @@
 accompanist = "0.34.0"
 androidDesugarJdkLibs = "2.1.1"
 # AGP and tools should be updated together
-androidGradlePlugin = "8.5.2"
+androidGradlePlugin = "8.6.0"
 androidTools = "31.5.2"
 androidxActivity = "1.9.1"
 androidxAppCompat = "1.7.0"
@@ -39,7 +39,7 @@ firebasePerfPlugin = "1.4.2"
 gmsPlugin = "4.4.2"
 googleOss = "17.1.0"
 googleOssPlugin = "0.10.6"
-hilt = "2.51.1"
+hilt = "2.52"
 hiltExt = "1.2.0"
 jacoco = "0.8.7"
 junit = "4.13.2"
@@ -50,6 +50,7 @@ kotlinxCoroutines = "1.8.1"
 kotlinxDatetime = "0.6.1"
 kotlinxSerializationJson = "1.7.2"
 ksp = "2.0.20-1.0.24"
+ktlint = "12.1.1"
 lifecycleRuntimeKtx = "2.8.4"
 moduleGraph = "2.5.0"
 okhttp = "4.12.0"
@@ -58,7 +59,7 @@ protobufPlugin = "0.9.4"
 retrofit = "2.11.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 robolectric = "4.13"
-roborazzi = "1.25.0"
+roborazzi = "1.26.0"
 room = "2.6.1"
 secrets = "2.0.1"
 truth = "1.4.2"
@@ -195,6 +196,7 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 module-graph = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraph" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }

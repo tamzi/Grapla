@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.grapla.android.application.compose)
     alias(libs.plugins.grapla.hilt)
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.ktlint)
 }
 
 android {
