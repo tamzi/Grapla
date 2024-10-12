@@ -4,6 +4,7 @@ What are conventions/ Build Logic?
 
 Look inside...
  - Has inline documentation explaining how to use it
+ - Shows how you can use convention plugins on a multiModule app with a design system library and a designsystem Library demo
 
 - More to follow
 
