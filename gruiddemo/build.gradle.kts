@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.grapla.android.application)
     alias(libs.plugins.grapla.android.application.compose)
     alias(libs.plugins.ktlint)
-    // id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
 android {
