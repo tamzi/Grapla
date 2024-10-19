@@ -10,6 +10,6 @@ Look inside...
 
 **uses Java 21:**
 - Uses Java 21
-- Uses Gradle 7.+
+- Uses Gradle 8.7.+
 - Set Java 21 in AndroidStudio
  - AndroidStudio > Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JDK > 21
