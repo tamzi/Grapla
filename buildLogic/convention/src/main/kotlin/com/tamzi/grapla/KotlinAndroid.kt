@@ -20,9 +20,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinTopLevelExtension
  * These configurations ensure that the projects adhere to specific standards and use
  * the appropriate versions of Java and Kotlin.
  *
-* */
-
-/**
  * Configure base Kotlin with Android options.
  * This setup ensures that the project is configured with the necessary Kotlin and Android options,
  * including support for Java 11 APIs and core library desugaring.

@@ -44,7 +44,6 @@ import org.gradle.api.Project
  *
  * */
 
-
 class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
@@ -56,4 +55,3 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
         }
     }
 }
-

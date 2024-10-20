@@ -4,7 +4,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
-
 /**
  *
  * The `AndroidTestConventionPlugin` class implements the `Plugin<Project>` interface in Gradle,
@@ -66,5 +65,4 @@ class AndroidTestConventionPlugin : Plugin<Project> {
             }
         }
     }
-
 }
