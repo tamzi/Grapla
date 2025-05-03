@@ -47,4 +47,5 @@ captures/
 # Kotlin
 .kotlin
 
-/.qodo/
+.qodo
+
