@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.tamzi.grapla"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.tamzi.grapla"

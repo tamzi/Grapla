@@ -104,6 +104,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 add("testImplementation", kotlin("test"))
 
                 add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
+                //add("implementation", project.findProperty("libs.androidx.tracing.ktx") as Provider<*>)
             }
         }
     }

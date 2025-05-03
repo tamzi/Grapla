@@ -3,10 +3,12 @@ package com.tamzi.grapla
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
@@ -80,7 +82,8 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
     configureKotlin<KotlinAndroidProjectExtension>()
 
     dependencies {
-        add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
+        add("coreLibraryDesugaring",
+            project.extensions.getByType<VersionCatalogsExtension>().named("libs").findLibrary("android.desugarJdkLibs").get())
     }
 }
 
