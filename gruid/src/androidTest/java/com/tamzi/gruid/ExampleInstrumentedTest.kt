@@ -9,6 +9,10 @@ import org.junit.runner.RunWith
 /**
  * Instrumented test, which will execute on an Android device.
  *
+ * Note: Android instrumented tests currently require JUnit 4 (via AndroidJUnit4 runner).
+ * JUnit 5/6 is not yet officially supported by AndroidX for instrumented tests.
+ * Unit tests (in src/test) use JUnit 6.
+ *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
