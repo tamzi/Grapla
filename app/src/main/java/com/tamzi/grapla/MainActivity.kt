@@ -13,6 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.tamzi.gruid.theme.GraplaTheme
 
+/**
+ * Main entry point for the Grapla application.
+ * Sets up the app with Material 3 theming and edge-to-edge display.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +34,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * Displays a greeting message.
+ *
+ * @param name The name to greet.
+ * @param modifier Optional modifier for styling and layout customization.
+ */
 @Composable
 fun Greeting(
     name: String,
