@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.grapla.android.library)
     alias(libs.plugins.grapla.android.library.compose)
     alias(libs.plugins.grapla.android.lint)
-    alias(libs.plugins.ktlint)
+    alias(libs.plugins.grapla.detekt)
 }
 
 android {
@@ -27,8 +27,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "21"
+
+    testOptions {
+        unitTests {
+            // Enable JUnit 6 - uses JUnit Platform for test execution
+            all {
+                it.useJUnitPlatform()
+            }
+        }
     }
 }
 
@@ -47,11 +53,13 @@ dependencies {
 
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.androidx.compose.ui.testManifest)
-    testImplementation(libs.junit)
+    // JUnit 6 dependencies (released Oct 2025)
+    testImplementation(libs.junit6)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.hilt.android.testing)
     testImplementation(libs.robolectric)
 
     androidTestImplementation(libs.bundles.androidx.compose.ui.test)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.test.espresso.core)
 }
