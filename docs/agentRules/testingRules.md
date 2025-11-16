@@ -25,28 +25,72 @@
 ./gradlew coverageAll     # Full - unit + instrumented
 ```
 
+## Testing Strategy
+
+This project uses **JUnit 6** (version 6.0.1, released October 2025) for all unit tests.
+Instrumented tests use JUnit 4 due to Android limitations.
+
+### Test Types and Frameworks
+
+| Test Type              | Location           | Framework | Import Package                                   | Usage                         |
+|------------------------|--------------------|-----------|--------------------------------------------------|-------------------------------|
+| **Unit Tests**         | `src/test/`        | JUnit 6   | `org.junit.jupiter.api.*`                        | 90% of tests - fast, isolated |
+| **Instrumented Tests** | `src/androidTest/` | JUnit 4   | `org.junit.*` + `@RunWith(AndroidJUnit4::class)` | UI, Android framework only    |
+
+**Why This Strategy?**
+
+- ✅ **JUnit 6 for unit tests** - Modern features, better parameterized tests, nested classes,
+  dynamic tests
+- ⚠️ **JUnit 4 for instrumented tests** - Android/AndroidX does not officially support JUnit 5/6 yet
+- 🎯 **Maximize unit tests** - Faster execution, better test design, full JUnit 6 capabilities
+- 🎯 **Minimize instrumented tests** - Use only for UI (Espresso) or true device integration
+
+### Important Notes
+
+1. **Do NOT mix JUnit versions in the same test source set**
+    - Unit tests (`src/test/`) → Always use `org.junit.jupiter.api.*`
+    - Instrumented tests (`src/androidTest/`) → Always use `org.junit.*` with
+      `@RunWith(AndroidJUnit4::class)`
+
+2. **Third-party plugins NOT recommended**
+    - The `android-junit5` plugin exists but has limitations
+    - Google does not officially support JUnit 5/6 for instrumented tests
+    - Keep it simple: JUnit 6 for unit tests, JUnit 4 for instrumented tests
+
+3. **Test Configuration**
+    - Unit tests automatically use `useJUnitPlatform()` via convention plugins
+    - Instrumented tests use `AndroidJUnitRunner` (configured in `defaultConfig`)
+
 ## Testing Stack
 
-**Unit Tests (JVM)**
+**Unit Tests (JVM) - JUnit 6**
 
-- **JUnit 5** - Test framework
+- **JUnit 6** - Test framework (`org.junit.jupiter:junit-jupiter:6.0.1`)
 - **kotlinx.coroutines.test** - `runTest`, coroutine testing
 - **Truth** - Fluent assertions
 - **Turbine** - Flow testing
+- **Robolectric** - Android framework simulation (when needed)
 
-**Instrumented Tests (Device/Emulator)**
+**Instrumented Tests (Device/Emulator) - JUnit 4**
 
+- **JUnit 4** - Test framework (via `androidx.test.ext:junit`)
 - **Compose UI Testing** - UI components
 - **Hilt Testing** - `@HiltAndroidTest` for DI
 - **AndroidX Test** - Runners and rules
+- **Espresso** - UI interactions
 
 ## Quick Patterns
 
-### ViewModel Test
+### ViewModel Test (JUnit 6)
 
 ```kotlin
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.extension.RegisterExtension
+
 class HomeViewModelTest {
-    @get:Rule
+    @JvmField
+    @RegisterExtension
     val mainDispatcherRule = MainDispatcherRule()
     
     private lateinit var fakeArticleRepository: FakeArticleRepository
@@ -75,9 +119,12 @@ class HomeViewModelTest {
 }
 ```
 
-### Repository Test
+### Repository Test (JUnit 6)
 
 ```kotlin
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.BeforeEach
+
 class ArticleRepositoryTest {
     private lateinit var fakeNetworkDataSource: FakeNetworkDataSource
     private lateinit var repository: OfflineFirstArticleRepository
@@ -104,9 +151,11 @@ class ArticleRepositoryTest {
 }
 ```
 
-### Use Case Test
+### Use Case Test (JUnit 6)
 
 ```kotlin
+import org.junit.jupiter.api.Test
+
 class GetArticlesUseCaseTest {
     @Test
     fun `filters articles by category when specified`() = runTest {
@@ -158,10 +207,17 @@ fun `delayed operations advance virtual time`() = runTest {
 }
 ```
 
-### Compose UI Test
+### Compose UI Test (JUnit 4 - Instrumented)
 
 ```kotlin
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+
 @HiltAndroidTest
+@RunWith(AndroidJUnit4::class)
 class HomeScreenTest {
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
@@ -194,15 +250,18 @@ class HomeScreenTest {
 }
 ```
 
-## Database Testing
+## Database Testing (JUnit 6 with Robolectric)
 
 ```kotlin
-@RunWith(AndroidJUnit4::class)
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterEach
+
 class ArticleDaoTest {
     private lateinit var database: GraplaDatabase
     private lateinit var articleDao: ArticleDao
-    
-    @Before
+
+    @BeforeEach
     fun setup() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         database = Room.inMemoryDatabaseBuilder(context, GraplaDatabase::class.java)
@@ -211,7 +270,7 @@ class ArticleDaoTest {
         articleDao = database.articleDao()
     }
     
-    @After
+    @AfterEach
     fun teardown() {
         database.close()
     }
@@ -231,8 +290,9 @@ class ArticleDaoTest {
 
 - Use in-memory database (fast, isolated)
 - `.allowMainThreadQueries()` for tests only
-- Close database in `@After`
+- Close database in `@AfterEach` (JUnit 6)
 - Test your logic, not Room's
+- Use Robolectric for Android framework dependencies in unit tests
 
 ## Test Utilities
 
@@ -269,35 +329,57 @@ fun testArticle(
 )
 ```
 
-### Test Dispatcher Rule
+### Test Dispatcher Rule (JUnit 6)
 
 ```kotlin
 // core/testing/src/main/kotlin/util/TestDispatchers.kt
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.jupiter.api.extension.AfterEachCallback
+import org.junit.jupiter.api.extension.BeforeEachCallback
+import org.junit.jupiter.api.extension.ExtensionContext
+
 class MainDispatcherRule(
     private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
-) : TestWatcher() {
-    override fun starting(description: Description) {
+) : BeforeEachCallback, AfterEachCallback {
+    
+    override fun beforeEach(context: ExtensionContext?) {
         Dispatchers.setMain(testDispatcher)
     }
     
-    override fun finished(description: Description) {
+    override fun afterEach(context: ExtensionContext?) {
         Dispatchers.resetMain()
     }
 }
+
+// Usage in tests:
+@JvmField
+@RegisterExtension
+val mainDispatcherRule = MainDispatcherRule()
 ```
 
 ## Naming Conventions
 
 **Files:** `{Name}{Type}Test.kt`
 
-- `HomeViewModelTest.kt`
-- `ArticleRepositoryTest.kt`
-- `GetArticlesUseCaseTest.kt`
+- `HomeViewModelTest.kt` - Unit test (JUnit 6)
+- `ArticleRepositoryTest.kt` - Unit test (JUnit 6)
+- `GetArticlesUseCaseTest.kt` - Unit test (JUnit 6)
+- `HomeScreenTest.kt` - Instrumented test (JUnit 4)
 
 **Test Methods:** Use backticks for readability
+
 ```kotlin
+// JUnit 6 unit tests
 @Test
 fun `uiState emits loading then success when data loads`() = runTest { }
+
+// JUnit 4 instrumented tests
+@Test
+fun homeScreen_displaysArticles() { }
 ```
 
 ## Common Assertions
@@ -323,24 +405,33 @@ flow.test {
 
 ### Do
 
-- Use `runTest` for coroutine tests
-- Use fakes over mocks (create in `core:testing`)
-- Use Truth for assertions
-- Use Turbine for Flow testing
-- Test public APIs only
-- Use descriptive test names with backticks
-- Test edge cases (empty, null, errors)
-- Keep tests independent
+- ✅ Use **JUnit 6** (`org.junit.jupiter.api.*`) for unit tests (`src/test/`)
+- ✅ Use **JUnit 4** with `@RunWith(AndroidJUnit4::class)` for instrumented tests (
+  `src/androidTest/`)
+- ✅ Maximize unit tests (fast, modern JUnit 6 features)
+- ✅ Minimize instrumented tests (only for UI and true device integration)
+- ✅ Use `runTest` for coroutine tests
+- ✅ Use fakes over mocks (create in `core:testing`)
+- ✅ Use Truth for assertions
+- ✅ Use Turbine for Flow testing
+- ✅ Test public APIs only
+- ✅ Use descriptive test names with backticks
+- ✅ Test edge cases (empty, null, errors)
+- ✅ Keep tests independent
 
 ### Don't
 
-- Don't use Mockk unless necessary
-- Don't test implementation details
-- Don't write flaky tests
-- Don't skip coverage after changes
-- Don't test framework code (Room, Compose, etc.)
-- Don't use `Thread.sleep()` - use `advanceTimeBy()`
-- Don't ignore test failures
+- ❌ Don't mix JUnit versions in the same test source set
+- ❌ Don't use JUnit 4 imports in unit tests (`src/test/`)
+- ❌ Don't use JUnit 6 in instrumented tests (`src/androidTest/`) - not supported by Android
+- ❌ Don't add third-party plugins for JUnit 5/6 instrumented test support
+- ❌ Don't use Mockk unless necessary
+- ❌ Don't test implementation details
+- ❌ Don't write flaky tests
+- ❌ Don't skip coverage after changes
+- ❌ Don't test framework code (Room, Compose, etc.)
+- ❌ Don't use `Thread.sleep()` - use `advanceTimeBy()`
+- ❌ Don't ignore test failures
 
 ## Pre-Commit Checklist
 
