@@ -1,0 +1,108 @@
+build:
+  maxIssues: 0    # fail the build on any new issue (baseline filters legacy)
+
+config:
+  validation: true
+
+processors:
+  active: true
+
+console-reports:
+  active: true
+
+# Align with Kotlin/Compose/Android norms; keep it lean to start, expand as you go.
+comments:
+  # Exclude design token files and preview code from KDoc requirements
+  # - Color.kt, DFonts.kt, DType.kt: Design tokens are self-documenting
+  # - DashikiIcons.kt, Shape.kt, Space.kt, Elevations.kt: Utility tokens
+  # - *Example.kt, *Preview.kt: Preview and example code doesn't need documentation
+  # - ddscatalog/**/*: Catalog app is for component previews only
+  excludes: [ '**/Color.kt', '**/DFonts.kt', '**/DType.kt', '**/DashikiIcons.kt', '**/Shape.kt', '**/Space.kt', '**/Elevations.kt', '**/*Example.kt', '**/*Preview.kt', '**/DText.kt', '**/Theme.kt', 'ddscatalog/**/*' ]
+  UndocumentedPublicClass:
+    active: true
+    searchInNestedClass: true
+    searchInInnerClass: true
+    searchInInnerObject: true
+    searchInInnerInterface: true
+  UndocumentedPublicFunction:
+    active: true
+    ignoreAnnotated: [ 'Preview' ]
+  UndocumentedPublicProperty:
+    active: true
+
+naming:
+  FunctionNaming:
+    active: true
+    ignoreAnnotated: [ 'Composable' ]
+
+style:
+  # Exclude files with legitimate magic numbers (color codes, design tokens, complex UI logic)
+  # - Color.kt: Contains hex color definitions (e.g., 0xFFFFFFFF)
+  # - Theme.kt: Material 3 color scheme with hex codes (e.g., 0xFF1C1B1E)
+  # - DCards.kt: Card components with fixed dimensions and styling values
+  # - AnimatedChars.kt: Animation timing values and keyframes
+  # - ExpandableCard.kt: Complex UI component with multiple dimension values
+  excludes: [ '**/Color.kt', '**/DCards.kt', '**/AnimatedChars.kt', '**/ExpandableCard.kt', '**/Theme.kt' ]
+  # Disable during migration - TODO comments are needed for tracking pending work
+  ForbiddenComment:
+    active: false
+  MagicNumber:
+    active: true
+    ignoreNumbers: [ '-1', '0', '1', '2' ]
+    ignoreHashCodeFunction: true
+    ignorePropertyDeclaration: true
+    ignoreLocalVariableDeclaration: true
+    ignoreConstantDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotation: true
+    ignoreNamedArgument: true
+    ignoreEnums: true
+    ignoreRanges: true
+    ignoreExtensionFunctions: true
+  WildcardImport:
+    active: true
+
+performance:
+  SpreadOperator:
+    active: true
+
+complexity:
+  # Exclude UI components with inherently complex logic from method length checks
+  # - DCards.kt: Multiple card variants with extensive styling and layout logic
+  # - ExpandableCard.kt: Complex expandable animation and state management logic
+  excludes: [ '**/DCards.kt', '**/ExpandableCard.kt' ]
+  LongMethod:
+    active: true
+    threshold: 100  # Higher for Compose: components coordinate state, effects, and UI declaratively
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 20  # Higher for Compose: remember, LaunchedEffect, and conditional rendering add natural complexity
+  LongParameterList:
+    active: true
+    functionThreshold: 10  # Higher for Compose: many optional parameters with defaults is idiomatic
+    constructorThreshold: 10  # Also allow more parameters in data classes for configuration objects
+    ignoreDefaultParameters: false  # Still count parameters to encourage config objects for public APIs
+    ignoreDataClasses: false
+    ignoreAnnotated: [ ]  # Don't automatically ignore @Composable - encourage good API design
+
+formatting:
+  active: true
+  android: true
+  autoCorrect: true
+  # Exclude files from formatting rules (contain special formatting or generated content)
+  # - Color.kt: Large color palette with aligned hex values for readability
+  # - DCards.kt: Complex card components with nested composables
+  # - AnimatedChars.kt: Animation code with specific timing alignment
+  # - ExpandableCard.kt: Complex state transitions requiring specific formatting
+  excludes: [ '**/Color.kt', '**/DCards.kt', '**/AnimatedChars.kt', '**/ExpandableCard.kt' ]
+  Filename:
+    active: true
+  NoWildcardImports:
+    active: true
+  ImportOrdering:
+    active: true
+  MaximumLineLength:
+    active: true
+    maxLineLength: 140
+
+# Additional Kotlin-specific rule tweaks can be added to the sections above as you scale the rule set
