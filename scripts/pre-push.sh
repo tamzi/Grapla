@@ -189,6 +189,86 @@ while IFS= read -r line; do
                     fi
                 fi
             done
+            
+            # Check 6: Commit message format validation
+            # Get the full commit message including body
+            full_msg=$(git log -1 --pretty=%B "$commit")
+            msg_body=$(echo "$full_msg" | tail -n +2 | sed '/^#/d' | sed '/^$/d' | tr -d '\n')
+            
+            # Check 6a: No body/details in commit message
+            if [ -n "$msg_body" ]; then
+                echo -e "${RED}❌ VIOLATION in commit ${commit:0:7}:${NC}" >&2
+                echo -e "   Commit message has a body/details section" >&2
+                echo -e "   Rule: Commits should be atomic and self-explanatory" >&2
+                echo -e "   Details belong in code comments, not commit messages" >&2
+                echo -e "   Subject: $msg" >&2
+                echo -e "   Body found: ${msg_body:0:60}..." >&2
+                echo "" >&2
+                VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            # Check 6b: No period at end of subject line
+            if [[ "$msg" =~ \.$ ]]; then
+                echo -e "${RED}❌ VIOLATION in commit ${commit:0:7}:${NC}" >&2
+                echo -e "   Subject line ends with a period" >&2
+                echo -e "   Subject: $msg" >&2
+                echo "" >&2
+                VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            # Check 6c: No conventional commit prefixes (feat:, fix:, docs:, etc.)
+            if [[ "$msg" =~ ^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.*\))?:\ .+ ]]; then
+                echo -e "${RED}❌ VIOLATION in commit ${commit:0:7}:${NC}" >&2
+                echo -e "   Subject uses conventional commit format (feat:, fix:, docs:, etc.)" >&2
+                echo -e "   Rule: Use simple past tense without prefixes" >&2
+                echo -e "   Subject: $msg" >&2
+                echo "" >&2
+                VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            # Check 6d: Must use past tense (not present tense or gerund)
+            if [[ "$msg" =~ ^(Add|Fix|Remove|Update|Delete|Create|Implement|Refactor|Move|Change|Merge|Revert)\ .+ ]]; then
+                echo -e "${RED}❌ VIOLATION in commit ${commit:0:7}:${NC}" >&2
+                echo -e "   Subject uses present tense instead of past tense" >&2
+                echo -e "   Rule: Use past tense (Added, Fixed, Removed, etc.)" >&2
+                echo -e "   Subject: $msg" >&2
+                echo "" >&2
+                VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            if [[ "$msg" =~ ^(Adding|Fixing|Removing|Updating|Deleting|Creating|Implementing|Refactoring|Moving|Changing)\ .+ ]]; then
+                echo -e "${RED}❌ VIOLATION in commit ${commit:0:7}:${NC}" >&2
+                echo -e "   Subject uses gerund form (-ing) instead of past tense" >&2
+                echo -e "   Rule: Use past tense (Added, Fixed, Removed, etc.)" >&2
+                echo -e "   Subject: $msg" >&2
+                echo "" >&2
+                VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            # Check 6e: No WIP or generic messages
+            if [[ "$msg" =~ ^(WIP|wip|Work in progress|TODO|FIXME|TBD|temp|temporary).*$ ]] || \
+               [[ "$msg" =~ ^(Updated files|Fixed stuff|Changes|Minor changes|Updates|Fixes)$ ]]; then
+                echo -e "${RED}❌ VIOLATION in commit ${commit:0:7}:${NC}" >&2
+                echo -e "   Generic or WIP commit message" >&2
+                echo -e "   Subject: $msg" >&2
+                echo "" >&2
+                VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            # Check 6f: Length check (max 72 chars)
+            msg_length=${#msg}
+            if [ "$msg_length" -gt 72 ]; then
+                echo -e "${RED}❌ VIOLATION in commit ${commit:0:7}:${NC}" >&2
+                echo -e "   Subject line is too long ($msg_length chars, max: 72)" >&2
+                echo -e "   Subject: $msg" >&2
+                echo "" >&2
+                VIOLATIONS=$((VIOLATIONS + 1))
+            elif [ "$msg_length" -gt 50 ]; then
+                echo -e "${YELLOW}⚠️  WARNING in commit ${commit:0:7}:${NC}" >&2
+                echo -e "   Subject line is longer than ideal ($msg_length chars, ideal: < 50)" >&2
+                echo -e "   Subject: $msg" >&2
+                echo "" >&2
+            fi
         done
         
         if [ "$VIOLATIONS" -gt 0 ]; then
@@ -203,6 +283,10 @@ while IFS= read -r line; do
             echo "  2. Split large commits into smaller, focused ones" >&2
             echo "  3. Separate documentation changes from code changes" >&2
             echo "  4. Ensure each doc file has its own commit" >&2
+            echo "  5. Fix commit message format (use 'git commit --amend' for latest)" >&2
+            echo "     - Use past tense (Added, not Add)" >&2
+            echo "     - No prefixes like 'feat:' or 'docs:'" >&2
+            echo "     - No body/details in commit messages" >&2
             echo "" >&2
             echo "Need help? Run: ./gradlew detekt test" >&2
             echo "to see detailed error messages" >&2
