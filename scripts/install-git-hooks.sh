@@ -47,29 +47,20 @@ EOF
 # Make the pre-commit hook executable
 chmod +x .git/hooks/pre-commit
 
-# Install commit-msg hook (for Change-Id or similar workflow)
-# This downloads from Gerrit's standard commit-msg hook location
-# If you're not using Gerrit, you can customize or remove this section
-if command -v curl &> /dev/null; then
-  echo "Downloading commit-msg hook..."
-  # Note: This is a placeholder URL - update with your actual commit-msg hook source
-  # or create a custom one. For now, we'll create a simple one.
-  cat > .git/hooks/commit-msg << 'EOF'
+# Install commit-msg hook
+cat > .git/hooks/commit-msg << 'EOF'
 #!/bin/bash
 # commit-msg hook: Validate commit message format
-# Customize this based on your commit message requirements
 
-# Example: Ensure commit messages are not empty
-if ! grep -qE '.+' "$1"; then
-  echo "Error: Commit message cannot be empty" >&2
-  exit 1
-fi
+# Run the validation hook
+./scripts/commit-msg-hook.sh "$1"
 
-exit 0
+# Exit with the script's exit code
+exit $?
 EOF
-  chmod +x .git/hooks/commit-msg
-  echo "✓ commit-msg hook installed successfully!"
-fi
+
+chmod +x .git/hooks/commit-msg
+echo "✓ commit-msg hook installed successfully!"
 
 # Install pre-push hook
 if [ -f "scripts/pre-push.sh" ]; then
