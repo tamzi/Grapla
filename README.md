@@ -86,17 +86,33 @@ The **Gruid** module contains reusable UI components following atomic design pri
     - Go to: `Settings > Build, Execution, Deployment > Build Tools > Gradle`
     - Set `Gradle JDK` to `21`
 
-3. **Sync Gradle**
+3. **Install Git Hooks** ⚡ **AUTO-INSTALLED!**
+
+   Git hooks are **automatically installed** during the first Gradle sync.
+
+   **Manual installation (if needed):**
+   ```bash
+   ./scripts/install-git-hooks.sh
+   ```
+
+   **Verify installation:**
+   ```bash
+   ./scripts/verify-hooks.sh
+   ```
+
+   These hooks enforce code quality and commit rules automatically.
+
+4. **Sync Gradle**
    ```bash
    ./gradlew sync
    ```
 
-4. **Build the project**
+5. **Build the project**
    ```bash
    ./gradlew build
    ```
 
-5. **Run the app**
+6. **Run the app**
     - Select the `app` run configuration
     - Choose your device/emulator
     - Click Run ▶️
@@ -181,13 +197,124 @@ The project uses **Detekt** for code analysis and formatting:
 ./gradlew detekt --auto-correct
 ```
 
-### Git Hooks
+## 🎣 Git Hooks - Automated Quality Checks
 
-Install pre-commit hooks for automated checks:
+Git hooks automatically validate your code before commits and pushes, catching issues early.
+
+### 🎉 Automatic Installation
+
+**Good news!** Git hooks are **automatically installed** when you first sync the project in Gradle.
+
+No manual setup needed - just clone and build!
+
+### Manual Installation (If Needed)
+
+If for some reason hooks aren't auto-installed, run:
 
 ```bash
-./scripts/install-hooks.sh
+./scripts/install-git-hooks.sh
 ```
+
+That's it! All hooks are now installed and active.
+
+### Verify Installation
+
+```bash
+./scripts/verify-hooks.sh
+```
+
+Expected output:
+
+```
+✅ All git hooks are properly installed
+```
+
+### What Do The Hooks Do?
+
+**Pre-Commit Hook** (runs when you commit)
+
+- ✅ Validates build succeeds
+- ✅ Runs tests
+- ✅ Checks code quality (detekt, lint)
+- ✅ Enforces commit rules (file count, naming, etc.)
+- ⏱️ Takes ~30-60 seconds
+
+**Pre-Push Hook** (runs when you push)
+
+- ✅ Validates all commits in push
+- ✅ Ensures no mixed code/doc changes
+- ✅ Runs detekt and tests
+- ⏱️ Takes ~15-30 seconds
+
+### Common Hook Scenarios
+
+**✅ Successful commit:**
+
+```bash
+git add MyFile.kt
+git commit -m "feat: add new feature"
+# Hooks run automatically, checks pass ✓
+# Commit succeeds
+```
+
+**❌ Blocked commit (too many files):**
+
+```bash
+git add file1.kt file2.kt file3.kt file4.kt file5.kt file6.kt
+git commit -m "feat: big change"
+# ❌ VIOLATION: 6 files staged (maximum: 5)
+# Fix: Split into smaller commits
+```
+
+**🔧 How to fix:**
+
+```bash
+# Split your changes into smaller commits
+git reset HEAD~1
+git add file1.kt file2.kt
+git commit -m "feat: add feature part 1"
+git add file3.kt file4.kt
+git commit -m "feat: add feature part 2"
+```
+
+### Bypassing Hooks (Emergency Only)
+
+In rare emergencies, you can skip hooks:
+
+```bash
+git commit --no-verify   # Skip pre-commit
+git push --no-verify     # Skip pre-push
+```
+
+⚠️ **Warning:** This is strongly discouraged! Violations will still be caught by:
+
+- CI/CD checks (slower feedback)
+- Server-side hooks (cannot be bypassed)
+- Code review
+
+### Troubleshooting
+
+**Hooks not running?**
+
+```bash
+# Check status
+./scripts/verify-hooks.sh
+
+# Reinstall if needed
+./scripts/install-git-hooks.sh
+```
+
+**Hooks too slow?**
+
+- They run build and tests to prevent broken commits
+- This saves time by catching issues before they enter git history
+- Commit less frequently, or push more often (pre-push is faster)
+
+**Need more details?**
+
+- Quick guide: `docs/quickStartHooks.md`
+- Full documentation: `scripts/README.md`
+- Enforcement strategy: `docs/gitHookEnforcement.md`
 
 ## 🤝 Contributing
 
