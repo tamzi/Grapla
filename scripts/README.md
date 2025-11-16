@@ -24,32 +24,19 @@ Git hooks are **automatically installed** during your first Gradle sync!
 
 ### Pre-Commit Hook
 
-Runs before every commit. **Blocking violations:** Module README size < 100 lines, camelCase docs (
-except README.md), max 5 files per commit, one doc file per commit, no mixed code/docs, no
-Kotlin/Java examples in markdown (except README.md). **Warnings:** Large commits (>3 files).
+Runs before every commit. 
 
 ### Commit-Msg Hook
 
-Validates commit messages. **Blocking violations:** No conventional prefixes (`feat:`, `fix:`,
-etc.), must use past tense (`Added` not `Add`), no period at end, no body section (atomic commits
-only), no WIP/generic messages, subject ≤ 72 chars. **Warnings:** Subject line 50-72 chars.
+Validates commit messages.
 
 ### Pre-Push Hook
 
-**Phase 1:** Validates commit history (multiple docs per commit, mixed code/docs, >5 files, README
-size >100 lines, no Kotlin/Java examples, commit message format).
-
-**Phase 2:** Runs `./gradlew detekt` and `./gradlew test`. Total time: ~15-30 seconds.
+**Phase 1:** Validates commit history
+**Phase 2:** Runs `./gradlew detekt` and `./gradlew test`.
 
 ### Bypassing Hooks
-
-**Not recommended**, but available:
-
-```bash
-git commit --no-verify
-git push --no-verify
-```
-
+**Not recommended**
 See `docs/agentRules/commitRules.md` for the policy on bypassing hooks.
 
 ### Available Scripts
