@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.grapla.android.application)
     alias(libs.plugins.grapla.android.application.compose)
-    alias(libs.plugins.ktlint)
+    alias(libs.plugins.grapla.detekt)
 }
 
 android {
