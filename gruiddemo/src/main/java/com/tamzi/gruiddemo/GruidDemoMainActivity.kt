@@ -13,6 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.tamzi.gruiddemo.ui.theme.GraplaTheme
 
+/**
+ * Main activity for the Gruid Demo application.
+ * Demonstrates the usage of Gruid design system components.
+ */
 class GruidDemoMainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +34,12 @@ class GruidDemoMainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * Displays a greeting message for demonstration purposes.
+ *
+ * @param name The name to greet.
+ * @param modifier Optional modifier for styling and layout customization.
+ */
 @Composable
 fun Greeting(
     name: String,
