@@ -4,76 +4,61 @@ Utility scripts for the Grapla project.
 
 ## Git Hooks
 
-### Installation
+### Quick Start
+
+**🎉 Automatic Installation**
+
+Git hooks are **automatically installed** during your first Gradle sync!
+
+Just clone the repo and build - hooks are set up automatically.
+
+**Manual Installation (if needed):**
 
 ```bash
 ./scripts/install-git-hooks.sh
 ```
 
-This installs the pre-commit and pre-push hooks that enforce commit rules from
-`docs/agents/commitRules.md` and run code quality checks.
+**Verify hooks are installed:**
+
+```bash
+./scripts/verify-hooks.sh
+```
 
 ### Pre-Commit Hook
 
-The pre-commit hook (`pre-commit-hook.sh`) runs before every commit and checks:
+Runs before every commit and checks:
 
-#### ❌ Blocking Violations (Commit will be rejected)
+**Blocking Violations:**
 
-1. **Module README size** - Module READMEs must be < 100 lines
-2. **File naming** - Documentation files must use camelCase (except README.md)
-3. **Commit size** - Maximum 8 files per commit
-4. **Multiple documentation files** - Each doc file should have its own commit
-5. **Mixed concerns** - Code and documentation changes together
+1. Module README size must be < 100 lines
+2. Documentation files must use camelCase (except README.md)
+3. Maximum 8 files per commit
+4. One documentation file per commit
+5. No mixed code and documentation changes
 
-#### Warnings (Commit allowed but discouraged)
+**Warnings:**
 
-1. **Large commits** - More than 5 files (ideal: 1-3)
+1. Large commits with more than 5 files
 
 ### Pre-Push Hook
 
-The pre-push hook (`pre-push`) automatically runs before every push and checks:
+Runs before every push and validates:
 
-#### Phase 1: Commit History Validation
+**Phase 1: Commit History Validation**
 
-Validates all commits being pushed follow the rules from `docs/agents/commitRules.md`:
+- Multiple documentation files per commit
+- Mixed code and documentation
+- More than 5 files per commit
+- Module README size > 100 lines
 
-**Blocking Violations (Prevents Push):**
+**Phase 2: Code Quality Checks**
 
-1. **Multiple documentation files per commit**
-    - Checks each commit in the push
-    - Rule: One `.md` file per commit
-    - Fix: Use `git rebase -i` to split commits
+- `./gradlew detekt` - Static analysis
+- `./gradlew test` - Unit tests
 
-2. **Mixed code and documentation**
-    - Checks each commit in the push
-    - Rule: Code and docs must be separate
-    - Fix: Use `git rebase -i` to separate commits
+Total time: ~15-30 seconds.
 
-3. **More than 5 files per commit**
-    - Checks each commit in the push
-    - Rule: Keep commits focused
-    - Fix: Use `git rebase -i` to split commits
-
-4. **Module README size > 100 lines**
-    - Checks any module READMEs changed
-    - Fix: Reduce README size and rebase
-
-**Warnings (Allows Push):**
-
-1. **4-5 files per commit**
-    - Suggests splitting if unrelated
-
-#### Phase 2: Code Quality Checks
-
-After validating commit history, runs:
-
-1. **`./gradlew detekt`** - Static analysis (5-10s)
-2. **`./gradlew test`** - Unit tests (10-20s)
-
-**Total time:** ~15-30 seconds. Fast validation first (<1s), then expensive quality checks only if
-commits are valid.
-
-### Bypassing the Hooks
+### Bypassing Hooks
 
 **Not recommended**, but in rare cases:
 
@@ -82,14 +67,28 @@ git commit --no-verify
 git push --no-verify
 ```
 
-**Note:** Using `--no-verify` is strongly discouraged. See `docs/agents/commitRules.md` for the
-policy.
+See `docs/agentRules/commitRules.md` for the policy on bypassing hooks.
 
-## Creating New Scripts
+### Available Scripts
 
-When adding new scripts:
+| Script                    | Purpose                                 |
+|---------------------------|-----------------------------------------|
+| `auto-install-hooks.sh`   | Auto-installs hooks if missing          |
+| `install-git-hooks.sh`    | Installs all git hooks                  |
+| `verify-hooks.sh`         | Verifies hooks are properly installed   |
+| `check-hooks-on-build.sh` | Checks hooks during build               |
+| `pre-commit-hook.sh`      | Validates staged changes                |
+| `pre-push.sh`             | Validates commit history and runs tests |
+| `pre-receive.sh`          | Server-side validation (admin only)     |
+| `setup-git-aliases.sh`    | Sets up convenient git aliases          |
 
-1. Make them executable: `chmod +x scripts/your-script.sh`
-2. Use `#!/bin/bash` shebang
-3. Add usage documentation here
-4. Follow shell script best practices
+### Troubleshooting
+
+**Hooks not running?**
+
+1. Check installation: `./scripts/verify-hooks.sh`
+2. Reinstall: `./scripts/install-git-hooks.sh`
+3. Check hooks path: `git config --get core.hooksPath`
+
+**Team members bypassing hooks?**
+See `docs/gitHookEnforcement.md` for enforcement strategies.
