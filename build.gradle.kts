@@ -25,3 +25,44 @@ plugins {
     // Apply Kover convention plugin to enable coverage tasks
     alias(libs.plugins.grapla.kover)
 }
+
+// Task to automatically install git hooks if not present
+// This runs during Gradle sync to ensure hooks are always set up
+tasks.register<Exec>("autoInstallGitHooks") {
+    group = "setup"
+    description = "Automatically installs git hooks if they're not present"
+    commandLine("bash", "./scripts/auto-install-hooks.sh")
+
+    // Don't fail the build, just warn
+    isIgnoreExitValue = true
+}
+
+// Task to check if git hooks are installed
+// This provides a warning during build if hooks are not set up
+tasks.register<Exec>("checkGitHooks") {
+    group = "verification"
+    description = "Verifies that git hooks are properly installed"
+    commandLine("bash", "./scripts/check-hooks-on-build.sh")
+
+    // Don't fail the build, just warn
+    isIgnoreExitValue = true
+
+    // Run after auto-install
+    dependsOn("autoInstallGitHooks")
+}
+
+// Run the check in subprojects when building
+subprojects {
+    tasks.configureEach {
+        if (name == "preBuild") {
+            dependsOn(":checkGitHooks")
+        }
+    }
+}
+
+// Also make it easy to run manually
+tasks.register("checkHooks") {
+    group = "verification"
+    description = "Alias for checkGitHooks"
+    dependsOn("checkGitHooks")
+}
