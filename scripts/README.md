@@ -10,8 +10,6 @@ Utility scripts for the Grapla project.
 
 Git hooks are **automatically installed** during your first Gradle sync!
 
-Just clone the repo and build - hooks are set up automatically.
-
 **Manual Installation (if needed):**
 
 ```bash
@@ -26,41 +24,26 @@ Just clone the repo and build - hooks are set up automatically.
 
 ### Pre-Commit Hook
 
-Runs before every commit and checks:
+Runs before every commit. **Blocking violations:** Module README size < 100 lines, camelCase docs (
+except README.md), max 5 files per commit, one doc file per commit, no mixed code/docs, no
+Kotlin/Java examples in markdown (except README.md). **Warnings:** Large commits (>3 files).
 
-**Blocking Violations:**
+### Commit-Msg Hook
 
-1. Module README size must be < 100 lines
-2. Documentation files must use camelCase (except README.md)
-3. Maximum 8 files per commit
-4. One documentation file per commit
-5. No mixed code and documentation changes
-
-**Warnings:**
-
-1. Large commits with more than 5 files
+Validates commit messages. **Blocking violations:** No conventional prefixes (`feat:`, `fix:`,
+etc.), must use past tense (`Added` not `Add`), no period at end, no body section (atomic commits
+only), no WIP/generic messages, subject ≤ 72 chars. **Warnings:** Subject line 50-72 chars.
 
 ### Pre-Push Hook
 
-Runs before every push and validates:
+**Phase 1:** Validates commit history (multiple docs per commit, mixed code/docs, >5 files, README
+size >100 lines, no Kotlin/Java examples, commit message format).
 
-**Phase 1: Commit History Validation**
-
-- Multiple documentation files per commit
-- Mixed code and documentation
-- More than 5 files per commit
-- Module README size > 100 lines
-
-**Phase 2: Code Quality Checks**
-
-- `./gradlew detekt` - Static analysis
-- `./gradlew test` - Unit tests
-
-Total time: ~15-30 seconds.
+**Phase 2:** Runs `./gradlew detekt` and `./gradlew test`. Total time: ~15-30 seconds.
 
 ### Bypassing Hooks
 
-**Not recommended**, but in rare cases:
+**Not recommended**, but available:
 
 ```bash
 git commit --no-verify
@@ -78,6 +61,7 @@ See `docs/agentRules/commitRules.md` for the policy on bypassing hooks.
 | `verify-hooks.sh`         | Verifies hooks are properly installed   |
 | `check-hooks-on-build.sh` | Checks hooks during build               |
 | `pre-commit-hook.sh`      | Validates staged changes                |
+| `commit-msg-hook.sh`      | Validates commit message format         |
 | `pre-push.sh`             | Validates commit history and runs tests |
 | `pre-receive.sh`          | Server-side validation (admin only)     |
 | `setup-git-aliases.sh`    | Sets up convenient git aliases          |
@@ -86,9 +70,8 @@ See `docs/agentRules/commitRules.md` for the policy on bypassing hooks.
 
 **Hooks not running?**
 
-1. Check installation: `./scripts/verify-hooks.sh`
+1. Check: `./scripts/verify-hooks.sh`
 2. Reinstall: `./scripts/install-git-hooks.sh`
-3. Check hooks path: `git config --get core.hooksPath`
+3. Check path: `git config --get core.hooksPath`
 
-**Team members bypassing hooks?**
-See `docs/gitHookEnforcement.md` for enforcement strategies.
+**Team bypassing hooks?** See `docs/gitHookEnforcement.md`.
