@@ -55,14 +55,14 @@ showcase application demonstrating the design system in action.
 
 ### Tech Stack
 
-| Category | Technology | Notes |
-|----------|-----------|-------|
-| **Language** | Kotlin | Primary language |
-| **UI Framework** | Jetpack Compose | Material 3 components |
-| **Build System** | Gradle (Kotlin DSL) | With convention plugins |
-| **DI** | Hilt (Dagger) | Dependency injection |
-| **Quality** | Detekt, KtLint | Code quality tools |
-| **Testing** | JUnit, Roborazzi | Unit and screenshot tests |
+| Category         | Technology          | Notes                       |
+|------------------|---------------------|-----------------------------|
+| **Language**     | Kotlin              | Primary language            |
+| **UI Framework** | Jetpack Compose     | Material 3 components       |
+| **Build System** | Gradle (Kotlin DSL) | With convention plugins     |
+| **DI**           | Hilt (Dagger)       | Dependency injection        |
+| **Quality**      | Detekt              | Code quality and formatting |
+| **Testing**      | JUnit, Roborazzi    | Unit and screenshot tests   |
 
 ### SDK Versions
 
@@ -167,7 +167,7 @@ Build configuration is managed through convention plugins:
 **Kotlin Style:**
 
 - Follow official Kotlin coding conventions
-- Use KtLint for formatting (configured in project)
+- Use Detekt for code analysis and formatting (configured in project)
 - Write clear, concise code comments
 - Prefer immutable data structures
 
@@ -293,10 +293,9 @@ private fun ComponentNamePreview() {
 # Run lint checks
 ./gradlew lint
 ./gradlew detekt
-./gradlew ktlintCheck
 
 # Format code
-./gradlew ktlintFormat
+./gradlew detekt --auto-correct
 
 # Clean build
 ./gradlew clean build
@@ -356,7 +355,7 @@ test(gruid): add screenshot tests for button components
 1. **Atomic commits** - One logical change per commit
 2. **Clear descriptions** - Explain what and why, not how
 3. **Test before committing** - Ensure tests pass
-4. **Lint before committing** - Run ktlintCheck and fix issues
+4. **Lint before committing** - Run detekt and fix issues
 5. **Reference issues** - Link to issues in footer if applicable
 
 ## Quality Standards
@@ -364,7 +363,7 @@ test(gruid): add screenshot tests for button components
 ### Code Quality
 
 - **Detekt:** Static code analysis must pass
-- **KtLint:** Code formatting must be consistent
+- **Detekt:** Code formatting must be consistent
 - **No warnings:** Address all compiler warnings
 - **No hardcoded values:** Use constants, theme values, or resources
 
@@ -547,7 +546,7 @@ Before completing any task, verify:
 ### Code Quality
 
 - [ ] Code follows Kotlin coding conventions
-- [ ] KtLint formatting is applied (`./gradlew ktlintFormat`)
+- [ ] Detekt formatting is applied (`./gradlew detekt --auto-correct`)
 - [ ] Detekt checks pass (`./gradlew detekt`)
 - [ ] Tests are written and passing (`./gradlew test`)
 - [ ] Components have `@Preview` annotations
