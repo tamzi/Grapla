@@ -257,8 +257,8 @@ plugins {
 
 ### Code Quality
 
-- **ktlint** - Code formatting
-- **Lint** - Static analysis
+- **Detekt** - Static code analysis and formatting
+- **Lint** - Android-specific static analysis
 - **Dependency Guard** - Dependency validation
 
 ## Best Practices

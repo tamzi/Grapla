@@ -17,7 +17,7 @@ convention plugins and a scalable structure.
 - ✅ **Material 3** - Latest Material Design components
 - ✅ **Gradle Version Catalogs** - Centralized dependency management
 - ✅ **Hilt** - Dependency injection
-- ✅ **Ktlint** - Code style enforcement
+- ✅ **Detekt** - Static code analysis and formatting
 - ✅ **CI/CD** - Automated workflows with GitHub Actions
 
 ## 📦 Project Structure
@@ -129,12 +129,11 @@ The **Gruid** module contains reusable UI components following atomic design pri
 ./gradlew test
 
 # Code quality checks
-./gradlew ktlintCheck
 ./gradlew detekt
 ./gradlew lint
 
 # Auto-format code
-./gradlew ktlintFormat
+./gradlew detekt --auto-correct
 
 # Install app on device
 ./gradlew installDebug
@@ -172,14 +171,14 @@ To use Gruid components in your modules:
 
 ### Code Style
 
-The project uses **ktlint** for code formatting:
+The project uses **Detekt** for code analysis and formatting:
 
 ```bash
-# Check code style
-./gradlew ktlintCheck
+# Run code analysis and formatting checks
+./gradlew detekt
 
-# Auto-format code
-./gradlew ktlintFormat
+# Auto-format code (fixes formatting issues)
+./gradlew detekt --auto-correct
 ```
 
 ### Git Hooks
@@ -201,7 +200,7 @@ and [Code of Conduct](CODE_OF_CONDUCT.md).
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
 3. Make your changes
 4. Run tests: `./gradlew test`
-5. Format code: `./gradlew ktlintFormat`
+5. Format code: `./gradlew detekt --auto-correct`
 6. Commit: `git commit -m 'feat(module): add amazing feature'`
 7. Push: `git push origin feature/amazing-feature`
 8. Open a Pull Request

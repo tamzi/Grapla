@@ -71,8 +71,8 @@ instructions for contributing.
 ## Code Style
 
 - Follow [Kotlin coding conventions](https://kotlinlang.org/docs/coding-conventions.html)
-- Use the ktlint plugin configured in the project
-- Run `./gradlew ktlintFormat` before committing
+- Use Detekt for code analysis and formatting
+- Run `./gradlew detekt --auto-correct` before committing
 
 ## Building the Project
 
@@ -83,8 +83,11 @@ instructions for contributing.
 # Run tests
 ./gradlew test
 
-# Run ktlint checks
-./gradlew ktlintCheck
+# Run code analysis and formatting checks
+./gradlew detekt
+
+# Auto-format code
+./gradlew detekt --auto-correct
 ```
 
 ## Design System (Gruid)
