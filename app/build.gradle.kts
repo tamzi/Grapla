@@ -3,12 +3,12 @@ plugins {
     alias(libs.plugins.grapla.android.application.compose)
     alias(libs.plugins.grapla.hilt)
     alias(libs.plugins.roborazzi)
-    alias(libs.plugins.ktlint)
+    alias(libs.plugins.grapla.detekt)
 }
 
 android {
     namespace = "com.tamzi.grapla"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.tamzi.grapla"
@@ -32,6 +32,10 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            // Enable JUnit 6 - uses JUnit Platform for test execution
+            all {
+                it.useJUnitPlatform()
+            }
         }
     }
     packaging {
@@ -73,8 +77,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.tooling)
 
-    testImplementation(libs.junit)
+    // JUnit 6 dependencies (released Oct 2025)
+    testImplementation(libs.junit6)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.hilt.android.testing)
 
     kspTest(libs.hilt.compiler)
+}
+
+// Configure Dependency Guard plugin
+dependencyGuard {
+    configuration("releaseRuntimeClasspath")
 }
