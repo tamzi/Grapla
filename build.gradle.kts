@@ -14,9 +14,14 @@ plugins {
     alias(libs.plugins.gms) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
-    alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.module.graph) apply true
+    // Kover plugin must be declared here with "apply false" so convention plugin can apply it
+    alias(libs.plugins.kover) apply false
+    // Detekt plugin - apply at root for project-wide static analysis
+    alias(libs.plugins.detekt) apply true
+    // Apply Kover convention plugin to enable coverage tasks
+    alias(libs.plugins.grapla.kover)
 }
