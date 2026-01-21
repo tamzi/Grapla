@@ -332,18 +332,15 @@ and [Code of Conduct](CODE_OF_CONDUCT.md).
 7. Push: `git push origin feature/amazing-feature`
 8. Open a Pull Request
 
+Using gradle 9+
+junit6 = "6.0.2"
+kotlin = "2.3.0"
+ksp = "2.3.3"
+
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-- Inspired by [Now in Android](https://github.com/android/nowinandroid) best practices
-- Design system patterns from [Dashiki](https://github.com/tamzi/dashiki)
-- Images in samples from [Pexels](https://www.pexels.com):
-    - lilartsy
-    - Tirachard Kumtanom
-    - Quang Anh Ha Nguyen
 
 ## 📧 Contact
 
