@@ -1,7 +1,7 @@
 package library
 
+import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
-import com.android.build.gradle.LibraryExtension
 import util.BuildLogicConstants
 import util.configureKotlinAndroid
 import util.disableUnnecessaryAndroidTests
@@ -36,7 +36,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = BuildLogicConstants.TARGET_SDK
                 defaultConfig.testInstrumentationRunner =
                     BuildLogicConstants.TEST_INSTRUMENTATION_RUNNER
                 // Disable animations for faster and more reliable tests
