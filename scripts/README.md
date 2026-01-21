@@ -61,4 +61,37 @@ See `docs/agentRules/commitRules.md` for the policy on bypassing hooks.
 2. Reinstall: `./scripts/install-git-hooks.sh`
 3. Check path: `git config --get core.hooksPath`
 
+**Permission denied errors when committing?**
+
+If you see errors like `.git/hooks/pre-commit: line 5: ./scripts/pre-commit-hook.sh: Permission denied`, the script files need execute permissions.
+
+**How to fix:**
+
+1. Navigate to your project root:
+   ```bash
+   cd /path/to/Grapla
+   ```
+
+2. Make all scripts executable:
+   ```bash
+   chmod +x scripts/*.sh
+   ```
+
+3. Verify the fix worked:
+   ```bash
+   ls -la scripts/*.sh
+   ```
+   You should see `-rwxr-xr-x` (the `x` means executable)
+
+4. Try committing again:
+   ```bash
+   git commit -m "your message"
+   ```
+
+**Why this happens:**
+- Scripts were cloned without preserving permissions
+- Scripts were copied/created manually
+- File permissions were reset by your system
+- Git doesn't always preserve executable bits across all platforms
+
 **Team bypassing hooks?** See `docs/gitHookEnforcement.md`.
