@@ -1,7 +1,7 @@
 package testing
 
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -34,14 +34,32 @@ class AndroidUnitTestConventionPlugin : Plugin<Project> {
         with(target) {
             // Configure unit test options based on module type
             pluginManager.withPlugin("com.android.application") {
-                extensions.configure<BaseAppModuleExtension> {
-                    configureUnitTests()
+                extensions.configure<ApplicationExtension> {
+                    testOptions {
+                        // Enable JUnit 6 for unit tests
+                        unitTests.all {
+                            it.useJUnitPlatform()
+                        }
+                        // Include Android framework classes for unit tests
+                        unitTests.isIncludeAndroidResources = true
+                        // Return default values for all resources instead of throwing exceptions
+                        unitTests.isReturnDefaultValues = true
+                    }
                 }
             }
 
             pluginManager.withPlugin("com.android.library") {
                 extensions.configure<LibraryExtension> {
-                    configureUnitTests()
+                    testOptions {
+                        // Enable JUnit 6 for unit tests
+                        unitTests.all {
+                            it.useJUnitPlatform()
+                        }
+                        // Include Android framework classes for unit tests
+                        unitTests.isIncludeAndroidResources = true
+                        // Return default values for all resources instead of throwing exceptions
+                        unitTests.isReturnDefaultValues = true
+                    }
                 }
             }
 
@@ -66,24 +84,6 @@ class AndroidUnitTestConventionPlugin : Plugin<Project> {
                 // Robolectric - Android framework testing
                 add("testImplementation", libs.findLibrary("robolectric").get())
             }
-        }
-    }
-
-    /**
-     * Configures unit test options for Android modules
-     */
-    private fun com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>.configureUnitTests() {
-        testOptions {
-            // Enable JUnit 6 for unit tests
-            unitTests.all {
-                it.useJUnitPlatform()
-            }
-
-            // Include Android framework classes for unit tests
-            unitTests.isIncludeAndroidResources = true
-
-            // Return default values for all resources instead of throwing exceptions
-            unitTests.isReturnDefaultValues = true
         }
     }
 }

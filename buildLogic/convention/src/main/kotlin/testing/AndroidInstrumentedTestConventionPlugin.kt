@@ -1,7 +1,7 @@
 package testing
 
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -36,14 +36,30 @@ class AndroidInstrumentedTestConventionPlugin : Plugin<Project> {
         with(target) {
             // Configure instrumented test options based on module type
             pluginManager.withPlugin("com.android.application") {
-                extensions.configure<BaseAppModuleExtension> {
-                    configureInstrumentedTests()
+                extensions.configure<ApplicationExtension> {
+                    defaultConfig {
+                        testInstrumentationRunner = BuildLogicConstants.TEST_INSTRUMENTATION_RUNNER
+                    }
+                    testOptions {
+                        // Disable animations for faster and more reliable tests
+                        animationsDisabled = true
+                        // Emulator snapshots for faster test execution
+                        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+                    }
                 }
             }
 
             pluginManager.withPlugin("com.android.library") {
                 extensions.configure<LibraryExtension> {
-                    configureInstrumentedTests()
+                    defaultConfig {
+                        testInstrumentationRunner = BuildLogicConstants.TEST_INSTRUMENTATION_RUNNER
+                    }
+                    testOptions {
+                        // Disable animations for faster and more reliable tests
+                        animationsDisabled = true
+                        // Emulator snapshots for faster test execution
+                        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+                    }
                 }
             }
 
@@ -85,23 +101,6 @@ class AndroidInstrumentedTestConventionPlugin : Plugin<Project> {
                     // Note: hilt-compiler should already be added by the hilt plugin
                 }
             }
-        }
-    }
-
-    /**
-     * Configures instrumented test options for Android modules
-     */
-    private fun com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>.configureInstrumentedTests() {
-        defaultConfig {
-            testInstrumentationRunner = BuildLogicConstants.TEST_INSTRUMENTATION_RUNNER
-        }
-
-        testOptions {
-            // Disable animations for faster and more reliable tests
-            animationsDisabled = true
-
-            // Emulator snapshots for faster test execution
-            execution = "ANDROIDX_TEST_ORCHESTRATOR"
         }
     }
 }
