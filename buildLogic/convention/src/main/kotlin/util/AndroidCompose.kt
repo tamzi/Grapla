@@ -1,32 +1,20 @@
 package util
 
-import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
 /**
- * Configure Compose-specific options:
- *
- * The configureAndroidCompose function is an internal extension function for the Project class in Gradle,
- * designed to configure Android Compose-specific options. It takes a CommonExtension parameter,
- * which is a generic type representing the common configuration options for Android projects.
+ * Configure Compose-specific options for application modules.
  */
-internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*, *, *, *, *, *>) {
-    commonExtension.apply {
+internal fun Project.configureAndroidCompose(extension: ApplicationExtension) {
+    extension.apply {
         buildFeatures {
             compose = true
-        }
-
-        dependencies {
-            val bom = libs.findLibrary("androidx-compose-bom").get()
-            add("implementation", platform(bom))
-            add("androidTestImplementation", platform(bom))
-            add("implementation", libs.findLibrary("androidx-compose-ui-tooling-preview").get())
-            add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
         }
 
         testOptions {
@@ -36,6 +24,43 @@ internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*,
             }
         }
     }
+
+    addComposeDependencies()
+    configureComposeCompiler()
+}
+
+/**
+ * Configure Compose-specific options for library modules.
+ */
+internal fun Project.configureAndroidCompose(extension: LibraryExtension) {
+    extension.apply {
+        buildFeatures {
+            compose = true
+        }
+
+        testOptions {
+            unitTests {
+                // For Robolectric
+                isIncludeAndroidResources = true
+            }
+        }
+    }
+
+    addComposeDependencies()
+    configureComposeCompiler()
+}
+
+private fun Project.addComposeDependencies() {
+    dependencies {
+        val bom = libs.findLibrary("androidx-compose-bom").get()
+        add("implementation", platform(bom))
+        add("androidTestImplementation", platform(bom))
+        add("implementation", libs.findLibrary("androidx-compose-ui-tooling-preview").get())
+        add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
+    }
+}
+
+private fun Project.configureComposeCompiler() {
 
     extensions.configure<ComposeCompilerGradlePluginExtension> {
         fun Provider<String>.onlyIfTrue() = flatMap { provider { it.takeIf(String::toBoolean) } }

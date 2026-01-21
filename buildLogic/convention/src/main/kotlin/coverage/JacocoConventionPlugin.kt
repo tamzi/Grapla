@@ -1,7 +1,7 @@
 package coverage
 
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -46,29 +46,27 @@ class JacocoConventionPlugin : Plugin<Project> {
 
             // Configure build variants for coverage
             pluginManager.withPlugin("com.android.application") {
-                extensions.configure<BaseAppModuleExtension> {
-                    enableJacocoCoverage()
+                extensions.configure<ApplicationExtension> {
+                    buildTypes {
+                        getByName("debug") {
+                            // Enable coverage for instrumented tests
+                            enableAndroidTestCoverage = true
+                        }
+                    }
                 }
                 configureJacocoTasks(isLibrary = false)
             }
 
             pluginManager.withPlugin("com.android.library") {
                 extensions.configure<LibraryExtension> {
-                    enableJacocoCoverage()
+                    buildTypes {
+                        getByName("debug") {
+                            // Enable coverage for instrumented tests
+                            enableAndroidTestCoverage = true
+                        }
+                    }
                 }
                 configureJacocoTasks(isLibrary = true)
-            }
-        }
-    }
-
-    /**
-     * Enables JaCoCo coverage for build variants
-     */
-    private fun com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>.enableJacocoCoverage() {
-        buildTypes {
-            named("debug") {
-                enableAndroidTestCoverage = true
-                enableUnitTestCoverage = true
             }
         }
     }
