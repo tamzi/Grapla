@@ -1,7 +1,7 @@
 package testing
 
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -28,14 +28,26 @@ class AndroidComposeTestConventionPlugin : Plugin<Project> {
         with(target) {
             // Configure Compose test options based on module type
             pluginManager.withPlugin("com.android.application") {
-                extensions.configure<BaseAppModuleExtension> {
-                    configureComposeTests()
+                extensions.configure<ApplicationExtension> {
+                    buildFeatures {
+                        compose = true
+                    }
+                    // Disable animations for faster and more reliable tests
+                    testOptions {
+                        animationsDisabled = true
+                    }
                 }
             }
 
             pluginManager.withPlugin("com.android.library") {
                 extensions.configure<LibraryExtension> {
-                    configureComposeTests()
+                    buildFeatures {
+                        compose = true
+                    }
+                    // Disable animations for faster and more reliable tests
+                    testOptions {
+                        animationsDisabled = true
+                    }
                 }
             }
 
@@ -57,20 +69,6 @@ class AndroidComposeTestConventionPlugin : Plugin<Project> {
                     libs.findLibrary("androidx.navigation.testing").get(),
                 )
             }
-        }
-    }
-
-    /**
-     * Configures Compose test options for Android modules
-     */
-    private fun com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>.configureComposeTests() {
-        buildFeatures {
-            compose = true
-        }
-
-        // Disable animations for faster and more reliable tests
-        testOptions {
-            animationsDisabled = true
         }
     }
 }
