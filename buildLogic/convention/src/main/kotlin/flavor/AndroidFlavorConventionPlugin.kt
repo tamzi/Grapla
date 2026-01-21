@@ -55,66 +55,51 @@ class AndroidFlavorConventionPlugin : Plugin<Project> {
             // Configure flavors for application modules
             pluginManager.withPlugin("com.android.application") {
                 extensions.configure<ApplicationExtension> {
-                    configureFlavorDimensions()
-                    configureProductFlavors()
+                    flavorDimensions += listOf(DIMENSION_ENVIRONMENT, DIMENSION_VERSION)
+                    
+                    productFlavors {
+                        create(FLAVOR_DEV) {
+                            dimension = DIMENSION_ENVIRONMENT
+                        }
+                        create(FLAVOR_STAGING) {
+                            dimension = DIMENSION_ENVIRONMENT
+                        }
+                        create(FLAVOR_PRODUCTION) {
+                            dimension = DIMENSION_ENVIRONMENT
+                        }
+                        create(FLAVOR_FREE) {
+                            dimension = DIMENSION_VERSION
+                        }
+                        create(FLAVOR_PAID) {
+                            dimension = DIMENSION_VERSION
+                        }
+                    }
                 }
             }
 
             // Configure flavors for library modules
             pluginManager.withPlugin("com.android.library") {
                 extensions.configure<LibraryExtension> {
-                    configureFlavorDimensions()
-                    configureProductFlavors()
+                    flavorDimensions += listOf(DIMENSION_ENVIRONMENT, DIMENSION_VERSION)
+                    
+                    productFlavors {
+                        create(FLAVOR_DEV) {
+                            dimension = DIMENSION_ENVIRONMENT
+                        }
+                        create(FLAVOR_STAGING) {
+                            dimension = DIMENSION_ENVIRONMENT
+                        }
+                        create(FLAVOR_PRODUCTION) {
+                            dimension = DIMENSION_ENVIRONMENT
+                        }
+                        create(FLAVOR_FREE) {
+                            dimension = DIMENSION_VERSION
+                        }
+                        create(FLAVOR_PAID) {
+                            dimension = DIMENSION_VERSION
+                        }
+                    }
                 }
-            }
-        }
-    }
-
-    /**
-     * Configures flavor dimensions for the project
-     */
-    private fun com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>.configureFlavorDimensions() {
-        flavorDimensions += listOf(
-            DIMENSION_ENVIRONMENT,
-            DIMENSION_VERSION,
-        )
-    }
-
-    /**
-     * Configures product flavors for each dimension
-     */
-    private fun com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>.configureProductFlavors() {
-        productFlavors {
-            // Environment flavors
-            create(FLAVOR_DEV) {
-                dimension = DIMENSION_ENVIRONMENT
-                // Add dev-specific configuration in the app module
-                // e.g., applicationIdSuffix = ".dev"
-                // e.g., versionNameSuffix = "-dev"
-            }
-
-            create(FLAVOR_STAGING) {
-                dimension = DIMENSION_ENVIRONMENT
-                // Add staging-specific configuration in the app module
-                // e.g., applicationIdSuffix = ".staging"
-                // e.g., versionNameSuffix = "-staging"
-            }
-
-            create(FLAVOR_PRODUCTION) {
-                dimension = DIMENSION_ENVIRONMENT
-                // Production is the default, no suffix needed
-            }
-
-            // Version flavors
-            create(FLAVOR_FREE) {
-                dimension = DIMENSION_VERSION
-                // Add free version-specific configuration
-                // e.g., applicationIdSuffix = ".free"
-            }
-
-            create(FLAVOR_PAID) {
-                dimension = DIMENSION_VERSION
-                // Add paid version-specific configuration
             }
         }
     }
