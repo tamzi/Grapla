@@ -2,6 +2,10 @@ plugins {
     alias(libs.plugins.grapla.android.application)
     alias(libs.plugins.grapla.android.application.compose)
     alias(libs.plugins.grapla.detekt)
+    alias(libs.plugins.grapla.android.unit.test)
+    alias(libs.plugins.grapla.android.instrumented.test)
+    alias(libs.plugins.grapla.android.compose.test)
+    alias(libs.plugins.grapla.jacoco)
 }
 
 android {

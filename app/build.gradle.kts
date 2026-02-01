@@ -2,8 +2,12 @@ plugins {
     alias(libs.plugins.grapla.android.application)
     alias(libs.plugins.grapla.android.application.compose)
     alias(libs.plugins.grapla.hilt)
-    alias(libs.plugins.roborazzi)
     alias(libs.plugins.grapla.detekt)
+    alias(libs.plugins.grapla.android.unit.test)
+    alias(libs.plugins.grapla.android.instrumented.test)
+    alias(libs.plugins.grapla.android.compose.test)
+    alias(libs.plugins.grapla.jacoco)
+    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -27,15 +31,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-        }
-    }
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-            // Enable JUnit 6 - uses JUnit Platform for test execution
-            all {
-                it.useJUnitPlatform()
-            }
         }
     }
     packaging {
@@ -66,22 +61,6 @@ dependencies {
     implementation(libs.coil.kt)
 
     ksp(libs.hilt.compiler)
-
-    androidTestImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(kotlin("test"))
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation(libs.hilt.android.testing)
-
-    debugImplementation(libs.androidx.ui.test.manifest)
-    debugImplementation(libs.androidx.ui.tooling)
-
-    // JUnit 6 dependencies (released Oct 2025)
-    testImplementation(libs.junit6)
-    testRuntimeOnly(libs.junit.platform.launcher)
-    testImplementation(libs.hilt.android.testing)
-
     kspTest(libs.hilt.compiler)
 }
 

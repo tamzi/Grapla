@@ -3,6 +3,10 @@ plugins {
     alias(libs.plugins.grapla.android.library.compose)
     alias(libs.plugins.grapla.android.lint)
     alias(libs.plugins.grapla.detekt)
+    alias(libs.plugins.grapla.android.unit.test)
+    alias(libs.plugins.grapla.android.instrumented.test)
+    alias(libs.plugins.grapla.android.compose.test)
+    alias(libs.plugins.grapla.jacoco)
 }
 
 android {
@@ -10,7 +14,6 @@ android {
 
     defaultConfig {
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -27,15 +30,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-
-    testOptions {
-        unitTests {
-            // Enable JUnit 6 - uses JUnit Platform for test execution
-            all {
-                it.useJUnitPlatform()
-            }
-        }
-    }
 }
 
 dependencies {
@@ -50,16 +44,4 @@ dependencies {
     api(libs.androidx.compose.ui.util)
 
     implementation(libs.coil.kt.compose)
-
-    testImplementation(libs.androidx.compose.ui.test)
-    testImplementation(libs.androidx.compose.ui.testManifest)
-    // JUnit 6 dependencies (released Oct 2025)
-    testImplementation(libs.junit6)
-    testRuntimeOnly(libs.junit.platform.launcher)
-    testImplementation(libs.hilt.android.testing)
-    testImplementation(libs.robolectric)
-
-    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
 }
