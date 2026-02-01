@@ -49,7 +49,8 @@ class JacocoConventionPlugin : Plugin<Project> {
                 extensions.configure<ApplicationExtension> {
                     buildTypes {
                         getByName("debug") {
-                            // Enable coverage for instrumented tests
+                            // Enable coverage for unit and instrumented tests
+                            enableUnitTestCoverage = true
                             enableAndroidTestCoverage = true
                         }
                     }
@@ -61,7 +62,8 @@ class JacocoConventionPlugin : Plugin<Project> {
                 extensions.configure<LibraryExtension> {
                     buildTypes {
                         getByName("debug") {
-                            // Enable coverage for instrumented tests
+                            // Enable coverage for unit and instrumented tests
+                            enableUnitTestCoverage = true
                             enableAndroidTestCoverage = true
                         }
                     }
