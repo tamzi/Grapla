@@ -6,7 +6,7 @@ PR #15 (updates branch → master branch) showed `rebaseable: false` status, pre
 ## Root Cause Analysis
 - The `updates` branch contained a complete project reimport (142 files added in commit 54385ff)
 - The `master` branch had evolved independently with 87+ commits
-- Both branches had commits with the same message "udpated README.md" but were completely different commits
+- Both branches had commits with the same message "updated README.md" but were completely different commits
 - Git detected these as unrelated histories, blocking standard merge/rebase operations
 
 ## Solution Applied
